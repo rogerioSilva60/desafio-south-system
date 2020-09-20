@@ -25,8 +25,8 @@ public class LocalArquivoService implements ArquivoService {
 
 	@Value("${south-system.armazenamento.local.diretorio-entrada}")
 	private String diretorioEntrada;
-	@Value("${south-system.armazenamento.local.diretorio-arquivo-saida}")
-	private String diretorioArquivoSaida;
+	@Value("${south-system.armazenamento.local.diretorio-saida}")
+	private String diretorioSaida;
 
 	@Override
 	public ArquivoEntrada buscarArquivoEntrada() {
@@ -72,11 +72,10 @@ public class LocalArquivoService implements ArquivoService {
 	@Override
 	public void transfere(ArquivoSaida arquivoSaida, String nomeArquivo) {
 		try {
-			File diretorio = new File(diretorioArquivoSaida);
+			File diretorio = new File(diretorioSaida);
 			if (!diretorio.exists())
 				diretorio.mkdirs();
-			File arquivo = new File(diretorioArquivoSaida, nomeArquivo);
-			arquivo.createNewFile();
+			File arquivo = new File(diretorioSaida, nomeArquivo);
 			Writer writer = new BufferedWriter(new FileWriter(arquivo));
 			writer.write(arquivoSaida.conteudo());
 			writer.close();
@@ -89,7 +88,7 @@ public class LocalArquivoService implements ArquivoService {
 	public ArquivoSaida buscarArquivoSaida(String nomeArquivo) {
 		ArquivoSaida arquivoSaida = null;
 		try {
-			List<String> linhasArquivo = Files.readAllLines(Path.of(diretorioArquivoSaida + "/" + nomeArquivo));
+			List<String> linhasArquivo = Files.readAllLines(Path.of(diretorioSaida + "/" + nomeArquivo));
 			String[] valores = linhasArquivo.get(0).split("ç");
 			arquivoSaida = new ArquivoSaida(valores);
 		} catch (IOException e) {
@@ -98,11 +97,11 @@ public class LocalArquivoService implements ArquivoService {
 		return arquivoSaida;
 	}
 	
+	@Override
 	public ArquivoSaida prepararArquivoSaida() {
 		ArquivoEntrada arquivosDeEntrada = buscarArquivoEntrada();
 		Long totalClientes = Long.valueOf(arquivosDeEntrada.getClientes().size());
-		Long totalVendedores = Long.valueOf(arquivosDeEntrada.getVendedores().size());
-		
+		Long totalVendedores = Long.valueOf(arquivosDeEntrada.getVendedores().size());		
 		ArquivoSaida arquivoSaida = ArquivoSaida.builder()
 				.quantidadeCliente(totalClientes)
 				.quantidadeVendedor(totalVendedores)

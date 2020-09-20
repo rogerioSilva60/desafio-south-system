@@ -1,5 +1,6 @@
 package br.com.desafio.southsystem.api.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +13,10 @@ import br.com.desafio.southsystem.domain.service.ArquivoService;
 @RestController
 @RequestMapping("api/v1/relatorio")
 public class RelatorioController {
-
+	
+	@Value("${south-system.armazenamento.local.arquivo}")
+	private String arquivo;
+	
 	private ArquivoService arquivoService;
 
 	public RelatorioController(ArquivoService arquivoService) {
@@ -28,8 +32,8 @@ public class RelatorioController {
 	@GetMapping("arquivo-saida")
 	public ResponseEntity<ArquivoSaida> relatorioGeral(){
 		ArquivoSaida arquivoSaida = arquivoService.prepararArquivoSaida();
-		arquivoService.transfere(arquivoSaida, "flat_file_name.done.dat");
-		ArquivoSaida relatorio = arquivoService.buscarArquivoSaida("flat_file_name.done.dat");
+		arquivoService.transfere(arquivoSaida, arquivo);
+		ArquivoSaida relatorio = arquivoService.buscarArquivoSaida(arquivo);
 		return ResponseEntity.ok(relatorio);
 	}
 }
