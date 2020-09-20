@@ -5,19 +5,20 @@ import java.time.format.DateTimeFormatter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import br.com.desafio.southsystem.core.armazenar.AmazenarProperties;
 import br.com.desafio.southsystem.domain.model.ArquivoSaida;
 import br.com.desafio.southsystem.domain.service.ArquivoService;
 
 @Component
 public class SouthSystemCrawler {
 
-	@Value("${south-system.armazenamento.local.arquivo}")
-	private String arquivo;
+	@Autowired
+	private AmazenarProperties properties;
 	
 	private static final Logger log = LoggerFactory.getLogger(SouthSystemCrawler.class);
 	
@@ -33,7 +34,7 @@ public class SouthSystemCrawler {
 		log.info("Executando a transferencia de arquivo "
 				+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
 		ArquivoSaida arquivoSaida = arquivoService.prepararArquivoSaida();
-		arquivoService.transfere(arquivoSaida, arquivo);
+		arquivoService.transfere(arquivoSaida, properties.getLocal().getArquivo());
 		log.info("Finalizando a execucao de transferencia.");
 	}
 }

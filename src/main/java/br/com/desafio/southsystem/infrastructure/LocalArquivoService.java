@@ -10,9 +10,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.desafio.southsystem.core.armazenar.AmazenarProperties;
 import br.com.desafio.southsystem.domain.model.ArquivoEntrada;
 import br.com.desafio.southsystem.domain.model.ArquivoSaida;
 import br.com.desafio.southsystem.domain.model.Cliente;
@@ -23,13 +24,12 @@ import br.com.desafio.southsystem.domain.service.ArquivoService;
 @Service
 public class LocalArquivoService implements ArquivoService {
 
-	@Value("${south-system.armazenamento.local.diretorio-entrada}")
-	private String diretorioEntrada;
-	@Value("${south-system.armazenamento.local.diretorio-saida}")
-	private String diretorioSaida;
+	@Autowired
+	private AmazenarProperties properties;
 
 	@Override
 	public ArquivoEntrada buscarArquivoEntrada() {
+		String diretorioEntrada = properties.getLocal().getDiretorioEntrada();
 		File file = new File(diretorioEntrada);
 		File[] arquivos = file.listFiles();
 		List<Vendedor> vendedores = new ArrayList<>();
@@ -72,10 +72,10 @@ public class LocalArquivoService implements ArquivoService {
 	@Override
 	public void transfere(ArquivoSaida arquivoSaida, String nomeArquivo) {
 		try {
-			File diretorio = new File(diretorioSaida);
+			File diretorio = new File(properties.getLocal().getDiretorioSaida());
 			if (!diretorio.exists())
 				diretorio.mkdirs();
-			File arquivo = new File(diretorioSaida, nomeArquivo);
+			File arquivo = new File(properties.getLocal().getDiretorioSaida(), nomeArquivo);
 			Writer writer = new BufferedWriter(new FileWriter(arquivo));
 			writer.write(arquivoSaida.conteudo());
 			writer.close();
@@ -88,7 +88,7 @@ public class LocalArquivoService implements ArquivoService {
 	public ArquivoSaida buscarArquivoSaida(String nomeArquivo) {
 		ArquivoSaida arquivoSaida = null;
 		try {
-			List<String> linhasArquivo = Files.readAllLines(Path.of(diretorioSaida + "/" + nomeArquivo));
+			List<String> linhasArquivo = Files.readAllLines(Path.of(properties.getLocal().getDiretorioSaida() + "/" + nomeArquivo));
 			String[] valores = linhasArquivo.get(0).split("ç");
 			arquivoSaida = new ArquivoSaida(valores);
 		} catch (IOException e) {

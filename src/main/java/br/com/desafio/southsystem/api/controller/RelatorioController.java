@@ -1,11 +1,12 @@
 package br.com.desafio.southsystem.api.controller;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.desafio.southsystem.core.armazenar.AmazenarProperties;
 import br.com.desafio.southsystem.domain.model.ArquivoEntrada;
 import br.com.desafio.southsystem.domain.model.ArquivoSaida;
 import br.com.desafio.southsystem.domain.service.ArquivoService;
@@ -14,8 +15,8 @@ import br.com.desafio.southsystem.domain.service.ArquivoService;
 @RequestMapping("api/v1/relatorio")
 public class RelatorioController {
 	
-	@Value("${south-system.armazenamento.local.arquivo}")
-	private String arquivo;
+	@Autowired
+	private AmazenarProperties properties;
 	
 	private ArquivoService arquivoService;
 
@@ -32,8 +33,8 @@ public class RelatorioController {
 	@GetMapping("arquivo-saida")
 	public ResponseEntity<ArquivoSaida> relatorioGeral(){
 		ArquivoSaida arquivoSaida = arquivoService.prepararArquivoSaida();
-		arquivoService.transfere(arquivoSaida, arquivo);
-		ArquivoSaida relatorio = arquivoService.buscarArquivoSaida(arquivo);
+		arquivoService.transfere(arquivoSaida, properties.getLocal().getArquivo());
+		ArquivoSaida relatorio = arquivoService.buscarArquivoSaida(properties.getLocal().getArquivo());
 		return ResponseEntity.ok(relatorio);
 	}
 }
