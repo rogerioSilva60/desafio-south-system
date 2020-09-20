@@ -10,4 +10,10 @@ public class ItemVenda {
 	private Long id;
 	private Long quantidade;
 	private BigDecimal preco;
+	
+	public ItemVenda(String[] valoresItens) {
+		this.id = Long.valueOf(valoresItens[0]);
+		this.quantidade = Long.valueOf(valoresItens[1]);
+		this.preco = new BigDecimal(valoresItens[2]);
+	}
 }
