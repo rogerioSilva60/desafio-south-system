@@ -22,12 +22,12 @@ public class AmazenarProperties {
 		private String arquivo;
 		
 		public String getDiretorioEntrada() {
-			String variavelDeAmbiente = System.getenv().get("HOMEPATH");
+			String variavelDeAmbiente = System.getenv("HOME_PATH");
 			return  variavelDeAmbiente + diretorioEntrada;
 		}
 		
 		public String getDiretorioSaida() {
-			String variavelDeAmbiente = System.getenv().get("HOMEPATH");
+			String variavelDeAmbiente = System.getenv("HOME_PATH");
 			return variavelDeAmbiente + diretorioSaida;
 		}
 		
