@@ -12,7 +12,7 @@ Para executar o projeto, é necessário utilizar o Spring Tools 4 for Eclipse, p
 
 ### Gerenciamento dos arquivos de leitura
 
-  Para o funcionamento da leitura dos arquivos é necessário adicionar o caminho do diretório raiz na variável de ambiente do SO com o nome HOME_PATH, dentro da raiz deve existir pelo menos o diretório data/in com o arquivo .dat para poder o sistema ler o arquivo e transferir para data/out com os valores requisitados. 
+  Para o funcionamento da leitura dos arquivos é necessário adicionar o caminho do diretório raiz na variável de ambiente do SO com o nome HOME_PATH, dentro da raiz deve existir pelo menos o diretório data/in com o arquivo .dat para poder o sistema ler o arquivo e transferir para data/out com os valores requisitados. Por padrão o sistema verifica a cada minuto os arquivos de entrada e transfere para o arquivo de saída automático.
   
 ![variavel-de-ambiente](https://user-images.githubusercontent.com/23174611/93826118-efd25e00-fc3c-11ea-92b0-bd4e90c7674c.png)
 
